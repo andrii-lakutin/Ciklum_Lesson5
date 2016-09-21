@@ -11,7 +11,7 @@
 	<!-- ViewPort -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body ng-controller="appCtrl as app">
+<body ng-controller="appCtrl as app" ng-init="app.renderFavorite()">
 
 	<header>
 		<ul>
@@ -33,10 +33,11 @@
 	<section class="filtersSection">
 		<div>
 			<select class="type" ng-model="app.selected" 
-					ng-options="item.text for item in app.selectOptions track by item.value">
+					ng-options="item.text for item in app.selectOptions track by item.value"
+					ng-change="app.refreshData()">
 			</select>
 		</div>
-		<div class="year"><input type="text" placeholder="Year" id="year" ng-model="app.yearInput"></div>
+		<div class="year"><input type="text" placeholder="Year" id="year" ng-model="app.yearInput" ng-change="app.refreshData()"></div>
 		<div class="pages">
 			<div class="page" ng-repeat="item in app.pages">{{item}}</div>
 		</div>
@@ -49,9 +50,9 @@
 					<div class= "shadow">{{item.Title}}</div>
 				</div>
 				<div class="social">
-						<p>{{item.yearInput}}</p>
+						<p>{{item.Year}}</p>
 						<p>{{item.Type}}</p>
-						<p class="star"><i class="fa fa-star js-star" aria-hidden="true" ng-click="app.addToFavorite()"></i></p>
+						<p class="star"><i class="fa fa-star js-star" aria-hidden="true" ng-click="app.addToFavorite($event)"></i></p>
 				</div>
 			</div>
 		</div>

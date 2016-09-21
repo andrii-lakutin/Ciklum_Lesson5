@@ -26,6 +26,7 @@ export default class appCtrl {
    			this.deleteAll();
    		    break;
    		case "ONLY FAVORITE":
+   			this.onlyFavorite();
    		    break;
    		case "SEARCH":
    			this.hideSearch();
@@ -37,6 +38,13 @@ export default class appCtrl {
 
 	deleteAll(){
 		this.searchResult = [];
+		localStorage.clear();
+		this.clearMovies();
+	}
+
+	onlyFavorite(){
+		this.searchResult = [];
+		this.renderFavorite();
 	}
 
 	hideSearch(){
@@ -60,7 +68,6 @@ export default class appCtrl {
 
 	parseResponse(response){
 		this.searchResult = response.data.Search;
-		console.log(this.searchResult);
 	}
 
 	search(){
@@ -72,8 +79,44 @@ export default class appCtrl {
 		});
 	}
 
-	addToFavorite(){
+	addToFavorite(e){
+		var target = e.target;
+		var movie = target.parentNode.parentNode.parentNode;
+		var title = movie.children[0].children[0].innerHTML;
+
+		target.classList.toggle('star-shine-js');
+
+		if (localStorage.getItem(`${title}`) != null) {
+			localStorage.removeItem(`${title}`);
+		} else{
+			localStorage.setItem(`${title}`, movie.innerHTML);
+		}
+	}
+
+	renderFavorite(){
+		const MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
 		
+		for (let key in localStorage){
+			let movie = document.createElement('div');
+			movie.className = "movie";
+			movie.innerHTML = localStorage[key];
+			MOVIES_PLACE_IN_DOM.appendChild(movie);	
+		}
+	}
+
+	clearMovies(){
+		const MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
+	
+		while (MOVIES_PLACE_IN_DOM.children[0]) {
+		    MOVIES_PLACE_IN_DOM.removeChild(MOVIES_PLACE_IN_DOM.lastChild);
+		}	
+	}
+
+	refreshData(){
+		this.searchResult = [];
+		this.clearMovies();
+		this.renderFavorite();
+		this.search();
 	}
 
 }

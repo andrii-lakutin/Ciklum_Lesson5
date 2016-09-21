@@ -32304,6 +32304,7 @@
 						this.deleteAll();
 						break;
 					case "ONLY FAVORITE":
+						this.onlyFavorite();
 						break;
 					case "SEARCH":
 						this.hideSearch();
@@ -32316,6 +32317,14 @@
 			key: 'deleteAll',
 			value: function deleteAll() {
 				this.searchResult = [];
+				localStorage.clear();
+				this.clearMovies();
+			}
+		}, {
+			key: 'onlyFavorite',
+			value: function onlyFavorite() {
+				this.searchResult = [];
+				this.renderFavorite();
 			}
 		}, {
 			key: 'hideSearch',
@@ -32342,7 +32351,6 @@
 			key: 'parseResponse',
 			value: function parseResponse(response) {
 				this.searchResult = response.data.Search;
-				console.log(this.searchResult);
 			}
 		}, {
 			key: 'search',
@@ -32356,7 +32364,48 @@
 			}
 		}, {
 			key: 'addToFavorite',
-			value: function addToFavorite() {}
+			value: function addToFavorite(e) {
+				var target = e.target;
+				var movie = target.parentNode.parentNode.parentNode;
+				var title = movie.children[0].children[0].innerHTML;
+	
+				target.classList.toggle('star-shine-js');
+	
+				if (localStorage.getItem('' + title) != null) {
+					localStorage.removeItem('' + title);
+				} else {
+					localStorage.setItem('' + title, movie.innerHTML);
+				}
+			}
+		}, {
+			key: 'renderFavorite',
+			value: function renderFavorite() {
+				var MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
+	
+				for (var key in localStorage) {
+					var movie = document.createElement('div');
+					movie.className = "movie";
+					movie.innerHTML = localStorage[key];
+					MOVIES_PLACE_IN_DOM.appendChild(movie);
+				}
+			}
+		}, {
+			key: 'clearMovies',
+			value: function clearMovies() {
+				var MOVIES_PLACE_IN_DOM = document.querySelector('.moviesSection .nonFavorites');
+	
+				while (MOVIES_PLACE_IN_DOM.children[0]) {
+					MOVIES_PLACE_IN_DOM.removeChild(MOVIES_PLACE_IN_DOM.lastChild);
+				}
+			}
+		}, {
+			key: 'refreshData',
+			value: function refreshData() {
+				this.searchResult = [];
+				this.clearMovies();
+				this.renderFavorite();
+				this.search();
+			}
 		}]);
 		return appCtrl;
 	}();
