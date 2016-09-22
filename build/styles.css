@@ -511,7 +511,6 @@ header ul li:hover {
   color: #FFFF00;
 }
 
-.moviesSection .favorites,
 .moviesSection .nonFavorites {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -521,6 +520,12 @@ header ul li:hover {
   -ms-flex-pack: distribute;
       justify-content: space-around;
   width: 100%;
+}
+
+.moviesSection .nonFavorites .fav {
+  -webkit-box-ordinal-group: 0;
+      -ms-flex-order: -1;
+          order: -1;
 }
 
 @-webkit-keyframes star {

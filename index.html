@@ -39,7 +39,7 @@
 		</div>
 		<div class="year"><input type="text" placeholder="Year" id="year" ng-model="app.yearInput" ng-change="app.refreshData()"></div>
 		<div class="pages">
-			<div class="page" ng-repeat="item in app.pages">{{item}}</div>
+			<div class="page" ng-repeat="item in app.pages track by $index" ng-click="app.setPage(item)">{{item}}</div>
 		</div>
 	</section>
 

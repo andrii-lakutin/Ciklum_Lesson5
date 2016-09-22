@@ -43,6 +43,7 @@ export default class appCtrl {
 	}
 
 	onlyFavorite(){
+		this.clearMovies();
 		this.searchResult = [];
 		this.renderFavorite();
 	}
@@ -66,8 +67,15 @@ export default class appCtrl {
 		});
 	}
 
-	parseResponse(response){
-		this.searchResult = response.data.Search;
+	parseResponse(response){	
+		var filtered = response.data.Search.filter((item, i, arr) =>{
+			if (localStorage.getItem(`${item.Title}`) === null) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+		this.searchResult = filtered;
 	}
 
 	search(){
@@ -77,6 +85,11 @@ export default class appCtrl {
 			selectedValue: this.selected.value,
 			page         : this.page
 		});
+	}
+
+	setPage(page){
+		this.page = page;
+		this.search();
 	}
 
 	addToFavorite(e){
@@ -98,9 +111,9 @@ export default class appCtrl {
 		
 		for (let key in localStorage){
 			let movie = document.createElement('div');
-			movie.className = "movie";
+			movie.className = "movie fav";
 			movie.innerHTML = localStorage[key];
-			MOVIES_PLACE_IN_DOM.appendChild(movie);	
+			MOVIES_PLACE_IN_DOM.appendChild(movie);
 		}
 	}
 

@@ -73,11 +73,15 @@
 			}
 		}
 	}
-	.favorites, .nonFavorites{
+	.nonFavorites{
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-around;
 		width: 100%; 	
+		.fav{
+			order: -1;
+		}
 	}
+
 
 }
